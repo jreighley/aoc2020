@@ -4,7 +4,7 @@
 (def data (->> (slurp "resources/input1")
                (s/split-lines)
                (map #(Integer/parseInt %))
-               #_(sort)))
+               (sort)))  ;; this makes it a little too easy had to comment it out because first answer was correct.
 
 (defn find-pair [n-list target-n]
   (let  [subtracted-data (set (map #(- target-n %) n-list))]
