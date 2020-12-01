@@ -4,7 +4,7 @@
 (def data (->> (slurp "resources/input1")
                (s/split-lines)
                (map #(Integer/parseInt %))
-               (sort)))
+               #_(sort)))
 
 (defn find-pair [n-list target-n]
   (let  [subtracted-data (set (map #(- target-n %) n-list))]
@@ -19,8 +19,11 @@
   (let [first-n (first n-list)
         double-target (- target-n first-n)
         pairs (find-pair (rest n-list) double-target)]
-    pairs))  ;  would need recursion if the first number wasn't a winner..
-;;(* 620 1111 289) 199068980
+    (if (= ( count pairs) 2)
+      (conj pairs first-n)
+      (recur (rest n-list) target-n))))  ; (1111 289 620)
+
+(def answer-2 (reduce * (find-triple data 2020))) ;;199068980
 
 
 
