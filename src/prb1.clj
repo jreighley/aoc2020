@@ -8,7 +8,10 @@
 
 (defn find-pair [n-list target-n]
   (let  [subtracted-data (set (map #(- target-n %) n-list))]
-    (filter subtracted-data n-list)))  ;786811
+    (filter subtracted-data n-list)))
+
+(comment (find-pair data 2020))
+; (527 1493)
 
 (def answer-1 (reduce  * (find-pair data 2020))) ;786811
 
