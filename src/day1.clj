@@ -1,10 +1,10 @@
-(ns prb1
+(ns day1
   ( :require [clojure.string :as s]))
 
-(def data (->> (slurp "resources/input1")
-               (s/split-lines)
-               (map #(Integer/parseInt %))
-               (sort)))  ;; this makes it a little too easy had to comment it out because first answer was correct.
+(def data  (->> (slurp "resources/input1")
+                (s/split-lines)
+                (map #(Integer/parseInt %))
+                (sort)))  ;; this makes it a little too easy had to comment it out because first answer was correct.
 
 (defn find-pair
   "Given a list of numbers and a target sum, find a pair that sum to target"
