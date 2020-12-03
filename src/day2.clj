@@ -52,8 +52,8 @@
    (->> testdata
       (map parse-line)
       (map add-key-chars)
-      (filter different?)
       (filter correct?)
+      (filter different?)
       (count)))
 
 
