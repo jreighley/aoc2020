@@ -21,8 +21,6 @@
            count)
       (recur data (conj acc new-char) [new-col new-row] run rise))))
 
-(def answer-1 (slide data [\.] [0 0] 3 1)) ;214
-
 (defn slide-slope [run rise]
   (slide data [\.] [0 0] run rise))
 
