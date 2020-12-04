@@ -24,33 +24,31 @@
          (if (= units "cm")
            (<= 150 (Integer/parseInt measure) 193)
            (<= 59 (Integer/parseInt measure) 76)))))
-(defn valid-byr? [ m]
-  ( let [ byr (:byr m)]
+
+(defn valid-byr? [ {byr :byr}]
       (and (fourdigits? byr)
-           (<= 1920 (Integer/parseInt byr) 2002))))
-(defn valid-iyr? [ m]
-  ( let [ iyr (:iyr m)]
-    (and (fourdigits? iyr)
-         (<= 2010 (Integer/parseInt iyr) 2020))))
-(defn valid-eyr? [ m]
-  (let [eyr (:eyr m)]
+           (<= 1920 (Integer/parseInt byr) 2002)))
+
+(defn valid-iyr? [ { iyr :iyr}]
+  (and (fourdigits? iyr)
+       (<= 2010 (Integer/parseInt iyr) 2020)))
+
+(defn valid-eyr? [ { eyr :eyr}]
     (and (fourdigits? eyr)
-         (<= 2020 (Integer/parseInt eyr) 2030))))
-(defn valid-ecl? [ m]
-   (let [ecl (:ecl m)]
-     (#{"amb" "blu" "brn" "gry" "grn" "hzl" "oth"} ecl)))
-(defn valid-pid? [m]
-  (let [pid (:pid m)]
+         (<= 2020 (Integer/parseInt eyr) 2030)))
+
+(defn valid-ecl? [ {ecl :ecl}]
+     (#{"amb" "blu" "brn" "gry" "grn" "hzl" "oth"} ecl))
+
+(defn valid-pid? [{pid :pid}]=
     (and (#{9} (count pid))
-         (re-find #"\d{9}" pid))))
+         (re-find #"\d{9}" pid)))
 
 (defn valid-hcl? [m]
   (let [hcl (:hcl m)
-        hclseq (vec hcl)
         hash-start? (= \# (first hcl))]
       (and hash-start?
         (= 6 (count (keep #{\a \b \c \d \e \f \0 \1 \2 \3 \4 \5 \6 \7 \8 \9}  (rest  hcl)))))))
-
 
 (def pp-list (->> data
                   (map parse-line)
