@@ -11,11 +11,12 @@
 
 (def fourdigits? #(= ( count %) 4))
 
-(def enough-pairs? #(-> %
-                         (dissoc :cid)
+(def enough-pairs? #(->> %
                          keys
-                         count
+                         (keep #{ :hgt :iyr :eyr :pid :byr :hcl :ecl})
+                         (count)
                          #{7}))
+
 (defn valid-hgt? [m]
   (let [hgt (:hgt m)
         units (apply str  (take-last 2 hgt))
