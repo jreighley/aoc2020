@@ -2,7 +2,7 @@
   (:require [util :refer [import-lines]]))
 
 (def data (import-lines "resources/input3"))
-(def start-postion [ 0 0])
+
 (defn get-char [r c]
   (when (< r (count data))
     (-> (nth data r)
