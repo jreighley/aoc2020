@@ -61,14 +61,16 @@
                    (filter enough-pairs?)
                    count)) ;202 correct answer 1
 
-( def answer-2 (->> pp-list
-                    (filter enough-pairs?)
-                    (filter valid-byr?)
-                    (filter valid-iyr?)
-                    (filter valid-eyr?)
-                    (filter valid-hgt?)
-                    (filter valid-hcl?)
-                    (filter valid-ecl?)
-                    (filter valid-pid?)
-                    (count))) ;; 137 is correct
+(def answer-2 (->> pp-list
+                   (filter (apply every-pred [enough-pairs?
+                                              enough-pairs?
+                                              valid-byr?
+                                              valid-iyr?
+                                              valid-eyr?
+                                              valid-hgt?
+                                              valid-hcl?
+                                              valid-ecl?
+                                              valid-pid?]))
+                   (count))) ;137 is correct
+
 
