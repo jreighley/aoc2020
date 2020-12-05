@@ -5,7 +5,7 @@
 (def rows (range 1 129))
 (def cols (range 1 9))
 
-(def dirfn {\F  take
+(def dirfn {\F take
             \B take-last
             \L take
             \R take-last})
@@ -22,12 +22,13 @@
   (+ (* 8 (find-row (take 7 dirstr) rows))
      (find-row (take-last 3 dirstr) cols)))
 
-(def  answer-1 (reduce max (map dirs data))); 901 correct
+(def answer-1 (reduce max (map dirs data))); 901 correct
 
-(def answer-2 (let [possible-seats (remove (set (map dirs data))(for [x (map dec rows)
-                                                                      y (map dec cols)]
-                                                                 (+ (* 8 x)
-                                                                    y)))
+(def answer-2 (let [possible-seats (remove (set (map dirs data))
+                                           (for [x (map dec rows)
+                                                 y (map dec cols)]
+                                            (+ (* 8 x)
+                                               y)))
                     ticket-list  (map dirs data)
                     left-tickets (set (map inc ticket-list))
                     right-tickets (set (map dec ticket-list))]
