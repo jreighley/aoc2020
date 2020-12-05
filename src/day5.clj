@@ -10,17 +10,17 @@
             \L take
             \R take-last})
 
-(defn find-row [dirfns inv]
+(defn calc-row-or-col [dirfns rc-inv]
   (let [dir (dirfn (first dirfns))
-        amount (/ (count inv) 2)
-        newrows (dir amount inv)]
-    (if (zero? (count (rest dirfns)))
+        amount (/ (count rc-inv) 2)
+        newrows (dir amount rc-inv)]
+    (if (= 1 amount) ;once we parse 2 in half, there is no more to parse.
       (dec (first newrows))
       (recur (rest dirfns ) newrows))))
 
 (defn dirs [dirstr]
-  (+ (* 8 (find-row (take 7 dirstr) rows))
-     (find-row (take-last 3 dirstr) cols)))
+  (+ (* 8 (calc-row-or-col (take 7 dirstr) rows))
+     (calc-row-or-col (take-last 3 dirstr) cols)))
 
 (def answer-1 (reduce max (map dirs data))); 901 correct
 
