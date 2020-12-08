@@ -43,7 +43,7 @@
 
 (defn process2 [ pointer acc swapable]
   (if (= pointer 643)
-      (swap! answer-2 conj (str "winning swap " swapable) " acc" acc)
+      (swap! answer-2 conj {:line swapable :acc acc})
       (let [operation (nth data pointer)
             command (apply str (take 3 operation))
             swap-fn (if (= pointer swapable)
@@ -51,8 +51,7 @@
                       command)
             value  (find-int operation)
             op-fn (get cmd-fn swap-fn)
-            new-map (op-fn   {:cmd command :value value :pointer pointer :acc acc :swapable swapable})
-            _ (println new-map)]
+            new-map (op-fn   {:cmd command :value value :pointer pointer :acc acc :swapable swapable})]
         (if (or (@pointerlist2 pointer) (= pointer (count data)))
           new-map
           (do (swap! pointerlist2 conj pointer)
@@ -63,7 +62,7 @@
   (process2 0 0 swapable))
 
 (defn find-answer-2 []
-  (reset! answer-2 [])
+  (reset! answer-2 {})
   (reset! pointerlist #{})
   (find-loop)
   (dorun (map #(swap-run %) (range 0 642)))
