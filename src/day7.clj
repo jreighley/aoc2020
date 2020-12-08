@@ -31,15 +31,12 @@
                         (into parent-colors))]
      (swap! ancestors conj search-color)
      (if (= [] new-colors)
-         @ancestors
+         (dec (count (set @ancestors)))
          (recur new-colors))))
 
+;; not 27, 26
 
 
-
-
-(def parent-bags (into #{} (map :parent all-bags)))
-(def child-bags (into #{} (map :child all-bags)))
 
 
 
