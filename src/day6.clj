@@ -1,7 +1,8 @@
 (ns day6
-  (:require [util :refer [import-lines]]))
+  (:require [util :refer [import-lines]]
+            [clojure.set :as cs]))
 
-(def data (->> (import-lines "resources/input6")
+(def data (->> (import-lines  "resources/input6")
                (partition-by empty?)))
 
 (defn find-answer-1 []
@@ -14,7 +15,7 @@
 
 (defn unanimous? [group]
   (->> (map set  group)
-    (reduce clojure.set/intersection)
+    (reduce cs/intersection)
     count))
 
 (defn find-answer-2 []
