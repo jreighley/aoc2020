@@ -31,3 +31,17 @@
    (+ (reduce min decoded-seq)
       (reduce max decoded-seq)))) ;75678618
 
+(defn scoped-search [lb ub ns tn]
+ (let [scoped-range (subvec ns lb ub)
+       total (reduce - tn scoped-range)
+       next-range  (cond
+                     (neg? total) [(inc lb) ub]
+                     (pos? total) [lb (inc ub)]
+                     :else [lb ub])]
+      (if (zero? total)
+        (+ (reduce min scoped-range)
+           (reduce max scoped-range))
+        (recur (first next-range) (last next-range) ns tn)))) ; 75678618 correct
+
+(comment (time (scoped-search 0 1 (vec data) 542529149)));; 7ms
+(comment (time (find-answer-2))) ;; 106ms)
