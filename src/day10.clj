@@ -38,8 +38,18 @@
                 '(3 3)     1})
 
 (defn find-answer2 [list]
-  (->> (jumps2 [] (joltage-jumps list))
-   ))
+  (->> (jumps2 [] (joltage-jumps list))))
+
+(defn answer-2
+  ([list]
+   (answer-2 [] list))
+  ([acc list]
+   (let [sp (first list)
+         opts (filter #{(+ 1 sp) (+ 3 sp)} list)]
+     (if (empty? (rest list))
+         (count (reduce into [] acc))
+         (recur (conj acc opts) (rest list))))))
+
 
 
 
