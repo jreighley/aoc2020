@@ -26,10 +26,7 @@
                                                 (= nc c)))]
                                [nr nc]))))
 
-(defn parse-seat-status [input [r c]]
-  (let [rowstr (nth input r)
-        colstr (nth rowstr c)]
-    colstr))
+
 
 (defn seat-change [seat-state freq-map]
   (cond (= seat-state \L) (if (nil? (get freq-map \#))
@@ -40,34 +37,55 @@
                             \#)
         :else seat-state))
 
-(defn new-seat-state [input [r c]]
-  (let [freq-map (->> (find-neighbors input [r c])
-                      (map #(find-seat-status input %))
-                      (frequencies))
-        seat-state (find-seat-status input [r c])]
-    (seat-change seat-state freq-map)))
 
-(defn recursive-change [input]
-  (let [new-state   (map #(apply str %) (partition 98 (for [[row col] (memo-cell-list input)]
-                                                        (new-seat-state input [row col]))))]
-    #_(if (= input new-state)
-        input
-        (recur new-state))
-    new-state))
 
-(defn add-neigbor-status [input [{r :row c :col }m]]
-  (let [neighbor-rows  #{(inc r) r (dec r)}
-        neighbor-cols  #{(inc c) c (dec c)}]
-   (for [nr neighbor-rows
-         nc neighbor-cols
-         :where (not (and (= nr r)
-                          (= nc c)))]
-     (filter ))))
+(def state (atom []))
 
+(def leave? [fm])
+
+(def crowded? #(>=   (or (get-in % [:adjacent \#]) -1) 4))
+(def vacant? #(nil? (get-in % [:adjacent \L])))
+
+(defn add-next-state [m]
+  (assoc m :next-state (cond
+                         (= \. (:status m)) \.
+                         (vacant? m)  \#
+                         (crowded? m)  \L
+                         :else (:status m))))
+
+(defn add-adjacent-info [m]
+  (let [row (:row m)
+        col (:col  m)
+        row-set #{(inc row) row (dec row)}
+        col-set #{(inc col) col (dec col)}]
+       (->> @state
+         (filter #(row-set (:row %)))
+         (filter #(col-set (:col %)))
+         (remove #(and(= row (:row %))
+                      (= col (:col %))))
+         (map :status)
+         (frequencies)
+         (assoc m :adjacent))))
+
+
+;; intial setup
+
+(defn parse-seat-status [input [r c]]
+  (let [rowstr (nth input r)
+        colstr (nth rowstr c)]
+    colstr))
 
 (defn map-seats [input]
-  (for [[r c]  (memo-cell-list input)]
-   {:row r :col c :status  (parse-seat-status input [r c])}))
+  (let [seat-statuses (for [[r c]  (memo-cell-list input)]
+                       {:row r :col c :status  (parse-seat-status input [r c])})]
+   (reset! state seat-statuses)))
+
+(def crowded? #(>=   (or (get-in % [:adjacent \#]) -1) 4))
+(def vacant? #(nil? (get-in % [:adjacent \#])))
+
+
+
+
 
 
 
