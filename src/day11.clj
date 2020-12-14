@@ -41,10 +41,10 @@
 
 (def state (atom []))
 
-(def leave? [fm])
+
 
 (def crowded? #(>=   (or (get-in % [:adjacent \#]) -1) 4))
-(def vacant? #(nil? (get-in % [:adjacent \L])))
+(def vacant? #(nil? (get-in % [:adjacent \#])))
 
 (defn add-next-state [m]
   (assoc m :next-state (cond
@@ -80,12 +80,22 @@
                        {:row r :col c :status  (parse-seat-status input [r c])})]
    (reset! state seat-statuses)))
 
-(def crowded? #(>=   (or (get-in % [:adjacent \#]) -1) 4))
-(def vacant? #(nil? (get-in % [:adjacent \#])))
+(defn toggle-state [m]
+  (-> m
+      (conj {:status (:next-state m)})))
+
+(defn find-equlaibrium []
+  (let [ns (->> @state
+                (map add-adjacent-info)
+                (map add-next-state))
+        replacement-state (map toggle-state ns)]
+    (if (= @state replacement-state)
+      (count (filter #(= \# (:status %)) @state))
+      (do (reset! state replacement-state)
+          (hash @state)
+          (recur)))))
 
 
-
-
-
-
-
+(defn find-answer-1 []
+  (map-seats data)
+  (find-equlaibrium))
