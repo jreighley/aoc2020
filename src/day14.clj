@@ -9,7 +9,7 @@
 (defn binaryize [[mem val]]
   [mem (pad36 (Long/toBinaryString (Long/parseLong val)))])
 
-(def mask #(re-seq #"[\d|X]{36}" %))
+(def find-mask #(re-seq #"[\d|X]{36}" %))
 (def memory-loc #(re-seq #"\d*" %))
 (def memory-input? #(re-seq #"mem\[" %))
 
@@ -27,12 +27,21 @@
 
 (defn update-mem [mem mask [loc val]]
        (assoc mem loc (val-to-write mask val)))
+(def bin->long #(Long/valueOf % 2))
 
 (defn process-prog [mem mask prog]
   (let [process-line (first prog)
-        next-mask (if mask
-                    (first prog)
+        next-mask (if (find-mask process-line)
+                    (first (find-mask process-line))
                     mask)
         mem-update (when (memory-input? process-line)
-                     (parse-location-value process-line))]))
+                     (parse-location-value process-line))
+        new-mem (if mem-update
+                  (update-mem mem mask mem-update)
+                  mem)]
+    (if (empty? (rest prog))
+      (reduce + (map bin->long (vals new-mem)))
+      (recur new-mem next-mask (rest prog)))))
 
+
+;; 12081666704507 too low.
