@@ -11,6 +11,9 @@
                          (inc last-said)))]
     (conj sq next-number)))
 
+;;counting in a recursive function like this works okay for 2020 items.
+;; Probably less ideal on 30million..
+
 (defn get2020 [sq]
   (if (= (count sq) 2020)
     (last sq)
@@ -31,14 +34,14 @@
 ;; try do do it faster...
 
 (defn better-next-n [history]
-  (let [{lastn :last-n turn :turn limit :limit }history
+  (let [{lastn :last-n turn :turn limit :limit} history
         seen (last-seen history lastn)
         nextn (if (nil? seen)
                 0
                 (-  turn seen))
         new-history (conj history {:last-n nextn :turn (inc turn) lastn turn})]
     (if (= turn limit)
-      nextn (sort-by val new-history)
+      lastn
       (recur new-history))))
 
 (defn make-history [sq limit]
@@ -47,11 +50,11 @@
          :limit limit}
         (zipmap  (butlast sq)  (map inc(range)))))
 
-(->> (make-history start-seq 30000000)
-     (better-next-n))  ;;18234 was correct5
+(defn find-nth-said [n]
+  (->> (make-history start-seq n)
+       (better-next-n)))  ;;18234 was correct
 
-
-
+(comment (time (find-nth-said 30000000)))  ;;33 seconds or so..
 
 
 
