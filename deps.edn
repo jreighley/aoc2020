@@ -1,5 +1,6 @@
 {:path [src test]
  :deps {org.clojure/clojure {:mvn/version "1.10.1"}
-        org.clojure/math.combinatorics {:mvn/version "0.1.6"}}
+        org.clojure/math.combinatorics {:mvn/version "0.1.6"}
+        vlaaad/reveal {:mvn/version "1.1.178"}}
  :aliases
   {:remote-repl {:extra-deps {vlaaad/remote-repl {:mvn/version "1.1"}}}}}
